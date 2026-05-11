@@ -1,3 +1,4 @@
+#! /bin/python3
 import random
 from sys import exit
 
@@ -21,8 +22,8 @@ pg.display.set_caption('Boids')
 pg.mouse.set_visible(False)
 clock = pg.time.Clock()
 
-number_of_boids = 0
-number_of_predator_boids = 0
+number_of_boids = 100
+number_of_predator_boids = 100
 
 add_mode = 'boid'
 
@@ -42,8 +43,10 @@ rays = []
 paused = False
 next_frame = False
 
-[Boid(Vector2(random.randint(0, 1600), random.randint(0, 950)), False) for _ in range(number_of_boids)]
-[Boid(Vector2(random.randint(0, 1600), random.randint(0, 950)), True) for _ in range(number_of_predator_boids)]
+[Boid(Vector2(random.randint(0, 1600), random.randint(0, 950)), False)
+ for _ in range(number_of_boids)]
+[Boid(Vector2(random.randint(0, 1600), random.randint(0, 950)), True)
+ for _ in range(number_of_predator_boids)]
 
 # [Obstacle(Vector2(random.randint(0, 1600), random.randint(0, 950)), not (_ % 3)) for _ in range(50)]
 Ui.info_bg = Ui.info_bg.convert_alpha()
@@ -112,7 +115,8 @@ while True:
                         match key:
                             case 'click':
                                 if value.collidepoint(event.pos):
-                                    add_mode = click_adds[(click_adds.index(add_mode) + 1) % len(click_adds)]
+                                    add_mode = click_adds[(click_adds.index(
+                                        add_mode) + 1) % len(click_adds)]
                                     Boid.goal_exists = False
                             case 'boundary':
                                 if value.collidepoint(event.pos):
@@ -153,7 +157,8 @@ while True:
                                 if (
                                         Vector2(
                                             *event.pos) - boid.pos).length() < shortest_distance and not boid.is_predator:
-                                    shortest_distance = (Vector2(*event.pos) - boid.pos).length()
+                                    shortest_distance = (
+                                        Vector2(*event.pos) - boid.pos).length()
                                     obj = boid
 
                             if obj is not None:
@@ -162,7 +167,8 @@ while True:
                         case 'predator':
                             for boid in Boid.boids:
                                 if (Vector2(*event.pos) - boid.pos).length() < shortest_distance and boid.is_predator:
-                                    shortest_distance = (Vector2(*event.pos) - boid.pos).length()
+                                    shortest_distance = (
+                                        Vector2(*event.pos) - boid.pos).length()
                                     obj = boid
 
                             if obj is not None:
@@ -173,7 +179,8 @@ while True:
                                 if (
                                         Vector2(
                                             *event.pos) - obstacle.pos).length() < shortest_distance and not obstacle.bad:
-                                    shortest_distance = (Vector2(*event.pos) - obstacle.pos).length()
+                                    shortest_distance = (
+                                        Vector2(*event.pos) - obstacle.pos).length()
                                     obj = obstacle
 
                             if obj is not None:
@@ -182,7 +189,8 @@ while True:
                         case 'stink':
                             for obstacle in Obstacle.obstacles:
                                 if (Vector2(*event.pos) - obstacle.pos).length() < shortest_distance and obstacle.bad:
-                                    shortest_distance = (Vector2(*event.pos) - obstacle.pos).length()
+                                    shortest_distance = (
+                                        Vector2(*event.pos) - obstacle.pos).length()
                                     obj = obstacle
 
                             if obj is not None:
@@ -199,15 +207,20 @@ while True:
                             if value.collidepoint(event.pos):
                                 match key:
                                     case 'separation':
-                                        Boid.separation_factor = max((Boid.separation_factor - 0.01, 0))
+                                        Boid.separation_factor = max(
+                                            (Boid.separation_factor - 0.01, 0))
                                     case 'alignment':
-                                        Boid.alignment_factor = max((Boid.alignment_factor - 0.01, 0))
+                                        Boid.alignment_factor = max(
+                                            (Boid.alignment_factor - 0.01, 0))
                                     case 'cohesion':
-                                        Boid.cohesion_factor = max((Boid.cohesion_factor - 0.01, 0))
+                                        Boid.cohesion_factor = max(
+                                            (Boid.cohesion_factor - 0.01, 0))
                                     case 'avoidance':
-                                        Boid.avoidance_factor = max((Boid.avoidance_factor - 0.01, 0))
+                                        Boid.avoidance_factor = max(
+                                            (Boid.avoidance_factor - 0.01, 0))
                                     case 'goal':
-                                        Boid.goal_factor = max((Boid.goal_factor - 0.01, 0))
+                                        Boid.goal_factor = max(
+                                            (Boid.goal_factor - 0.01, 0))
 
                 case 5:
                     if Ui.enabled:
@@ -215,15 +228,20 @@ while True:
                             if value.collidepoint(event.pos):
                                 match key:
                                     case 'separation':
-                                        Boid.separation_factor = min((Boid.separation_factor + 0.01, 1))
+                                        Boid.separation_factor = min(
+                                            (Boid.separation_factor + 0.01, 1))
                                     case 'alignment':
-                                        Boid.alignment_factor = min((Boid.alignment_factor + 0.01, 1))
+                                        Boid.alignment_factor = min(
+                                            (Boid.alignment_factor + 0.01, 1))
                                     case 'cohesion':
-                                        Boid.cohesion_factor = min((Boid.cohesion_factor + 0.01, 1))
+                                        Boid.cohesion_factor = min(
+                                            (Boid.cohesion_factor + 0.01, 1))
                                     case 'avoidance':
-                                        Boid.avoidance_factor = min((Boid.avoidance_factor + 0.01, 1))
+                                        Boid.avoidance_factor = min(
+                                            (Boid.avoidance_factor + 0.01, 1))
                                     case 'goal':
-                                        Boid.goal_factor = min((Boid.goal_factor + 0.01, 1))
+                                        Boid.goal_factor = min(
+                                            (Boid.goal_factor + 0.01, 1))
         elif event.type == pg.KEYDOWN:
             match event.key:
                 case pg.K_SPACE:
@@ -250,7 +268,8 @@ while True:
         if timer > 1:
             rays.remove(ray)
 
-    Ui.draw(clock.get_fps(), screen, o_visualize, b_visualize, add_mode, goal_pos, fps_limit)
+    Ui.draw(clock.get_fps(), screen, o_visualize,
+            b_visualize, add_mode, goal_pos, fps_limit)
 
     pg.draw.circle(screen, 'white', pg.mouse.get_pos(), 10, 4)
 

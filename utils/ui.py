@@ -5,7 +5,7 @@ from utils import Obstacle, Boid
 pg.font.init()
 
 font_size = 28
-font = pg.font.Font('Assets/Fonts/Jetbrains_Mono.ttf', font_size)
+font = pg.font.Font('Assets/Fonts/JetBrains_Mono.ttf', font_size)
 
 no_of_rows = 24
 
@@ -19,15 +19,19 @@ class Ui:
 
     paused = False
 
-    pause_img = pg.transform.rotozoom(pg.image.load('Assets/pause.png'), 0, 0.2)
+    pause_img = pg.transform.rotozoom(
+        pg.image.load('Assets/pause.png'), 0, 0.2)
     play_img = pg.transform.rotozoom(pg.image.load('Assets/play.png'), 0, 0.2)
     next_img = pg.transform.rotozoom(pg.image.load('Assets/next.png'), 0, 0.25)
-    reset_img = pg.transform.rotozoom(pg.image.load('Assets/reset.png'), 0, 0.2)
+    reset_img = pg.transform.rotozoom(
+        pg.image.load('Assets/reset.png'), 0, 0.2)
 
     frame_count = 0
-    info_bg = pg.Surface((width + 20, 40 + row_height * no_of_rows), pg.SRCALPHA)
+    info_bg = pg.Surface(
+        (width + 20, 40 + row_height * no_of_rows), pg.SRCALPHA)
     info_bg.set_alpha(100)
-    pg.draw.rect(info_bg, 'black', (0, 0, width + 20, 40 + row_height * no_of_rows), 0, 10)
+    pg.draw.rect(info_bg, 'black', (0, 0, width + 20,
+                 40 + row_height * no_of_rows), 0, 10)
 
     _open = pg.Surface((50, 100), pg.SRCALPHA)
     _close = pg.Surface((50, 100), pg.SRCALPHA)
@@ -85,10 +89,14 @@ class Ui:
         pos = pg.mouse.get_pos()
 
         lines = [
-            f'Boids      : {len([x for x in filter((lambda boid: not boid.is_predator), Boid.boids)]):>10}',
-            f'Predators  : {len([x for x in filter((lambda boid: boid.is_predator), Boid.boids)]):>10}',
-            f'Obstacles  : {len([x for x in filter((lambda obstacle: not obstacle.bad), Obstacle.obstacles)]):>10}',
-            f'Bad Obs..  : {len([x for x in filter((lambda obstacle: obstacle.bad), Obstacle.obstacles)]):>10}',
+            f'Boids      : {
+                len([x for x in filter((lambda boid: not boid.is_predator), Boid.boids)]):>10}',
+            f'Predators  : {
+                len([x for x in filter((lambda boid: boid.is_predator), Boid.boids)]):>10}',
+            f'Obstacles  : {len([x for x in filter(
+                (lambda obstacle: not obstacle.bad), Obstacle.obstacles)]):>10}',
+            f'Bad Obs..  : {len([x for x in filter(
+                (lambda obstacle: obstacle.bad), Obstacle.obstacles)]):>10}',
             '',
             'Click      :',
             'Boundaries :',
@@ -115,66 +123,85 @@ class Ui:
 
         if Ui.enabled:
             screen.blit(Ui.info_bg, (Ui.x, Ui.y))
-            pg.draw.rect(screen, 'white', (Ui.x, Ui.y, Ui.width + 20, 40 + Ui.row_height * no_of_rows), 2, 10)
+            pg.draw.rect(screen, 'white', (Ui.x, Ui.y, Ui.width +
+                         20, 40 + Ui.row_height * no_of_rows), 2, 10)
 
             for rect in Ui.factor_rects.values():
                 pg.draw.rect(screen, '#444444', rect.inflate(-6, -6), 0, 10)
 
                 if rect.collidepoint(pos):
-                    pg.draw.rect(screen, '#12bac9', rect.inflate(-6, -6), 2, 10)
+                    pg.draw.rect(screen, '#12bac9',
+                                 rect.inflate(-6, -6), 2, 10)
 
             for name, rect in Ui.toggle_binary_rects.items():
                 match name:
                     case 'quads':
-                        pg.draw.rect(screen, '#444444', rect.inflate(-6, -6), 0, 10)
+                        pg.draw.rect(screen, '#444444',
+                                     rect.inflate(-6, -6), 0, 10)
                         if Boid.use_quadtree:
-                            pg.draw.rect(screen, '#12bac9', rect.inflate(-14, -14), 0, 5)
+                            pg.draw.rect(screen, '#12bac9',
+                                         rect.inflate(-14, -14), 0, 5)
                     case 'oquads':
-                        pg.draw.rect(screen, '#444444', rect.inflate(-6, -6), 0, 10)
+                        pg.draw.rect(screen, '#444444',
+                                     rect.inflate(-6, -6), 0, 10)
                         if o:
-                            pg.draw.rect(screen, '#12bac9', rect.inflate(-14, -14), 0, 5)
+                            pg.draw.rect(screen, '#12bac9',
+                                         rect.inflate(-14, -14), 0, 5)
                     case 'bquads':
-                        pg.draw.rect(screen, '#444444', rect.inflate(-6, -6), 0, 10)
+                        pg.draw.rect(screen, '#444444',
+                                     rect.inflate(-6, -6), 0, 10)
                         if b:
-                            pg.draw.rect(screen, '#12bac9', rect.inflate(-14, -14), 0, 5)
+                            pg.draw.rect(screen, '#12bac9',
+                                         rect.inflate(-14, -14), 0, 5)
                     case 'trails':
-                        pg.draw.rect(screen, '#444444', rect.inflate(-6, -6), 0, 10)
+                        pg.draw.rect(screen, '#444444',
+                                     rect.inflate(-6, -6), 0, 10)
                         if Boid.do_trails:
-                            pg.draw.rect(screen, '#12bac9', rect.inflate(-14, -14), 0, 5)
+                            pg.draw.rect(screen, '#12bac9',
+                                         rect.inflate(-14, -14), 0, 5)
                     case 'circles':
-                        pg.draw.rect(screen, '#444444', rect.inflate(-6, -6), 0, 10)
+                        pg.draw.rect(screen, '#444444',
+                                     rect.inflate(-6, -6), 0, 10)
                         if Boid.do_circles:
-                            pg.draw.rect(screen, '#12bac9', rect.inflate(-14, -14), 0, 5)
+                            pg.draw.rect(screen, '#12bac9',
+                                         rect.inflate(-14, -14), 0, 5)
             for name, rect in Ui.toggle_state_rects.items():
                 match name:
                     case 'click':
-                        pg.draw.rect(screen, '#444444', rect.inflate(-6, -6), 0, 10)
+                        pg.draw.rect(screen, '#444444',
+                                     rect.inflate(-6, -6), 0, 10)
                         txt = font.render(add_mode.title(), True, 'white')
                         txt_rect = txt.get_rect(center=rect.center)
 
                         screen.blit(txt, txt_rect)
 
                         if rect.collidepoint(pos):
-                            pg.draw.rect(screen, '#12bac9', rect.inflate(-6, -6), 2, 10)
+                            pg.draw.rect(screen, '#12bac9',
+                                         rect.inflate(-6, -6), 2, 10)
                     case 'boundary':
-                        pg.draw.rect(screen, '#444444', rect.inflate(-6, -6), 0, 10)
-                        txt = font.render(Boid.edge_mode.title(), True, 'white')
+                        pg.draw.rect(screen, '#444444',
+                                     rect.inflate(-6, -6), 0, 10)
+                        txt = font.render(
+                            Boid.edge_mode.title(), True, 'white')
                         txt_rect = txt.get_rect(center=rect.center)
 
                         screen.blit(txt, txt_rect)
 
                         if rect.collidepoint(pos):
-                            pg.draw.rect(screen, '#12bac9', rect.inflate(-6, -6), 2, 10)
+                            pg.draw.rect(screen, '#12bac9',
+                                         rect.inflate(-6, -6), 2, 10)
 
                     case 'fps':
-                        pg.draw.rect(screen, '#444444', rect.inflate(-3, 0), 0, 10)
+                        pg.draw.rect(screen, '#444444',
+                                     rect.inflate(-3, 0), 0, 10)
                         txt = font.render(fps_limit, True, 'white')
                         txt_rect = txt.get_rect(center=rect.center)
 
                         screen.blit(txt, txt_rect)
 
                         if rect.collidepoint(pos):
-                            pg.draw.rect(screen, '#12bac9', rect.inflate(-3, 0), 2, 10)
+                            pg.draw.rect(screen, '#12bac9',
+                                         rect.inflate(-3, 0), 2, 10)
 
             for name, rect in Ui.button_rects.items():
                 match name:
@@ -182,14 +209,18 @@ class Ui:
                         pg.draw.rect(screen, '#444444', rect.inflate(-6, -6), 0, border_top_left_radius=10,
                                      border_bottom_left_radius=10)
 
-                        screen.blit(Ui.reset_img, Ui.reset_img.get_rect(center=rect.center))
+                        screen.blit(Ui.reset_img, Ui.reset_img.get_rect(
+                            center=rect.center))
                     case 'playpause':
-                        pg.draw.rect(screen, '#444444', rect.inflate(-6, -6), 0)
+                        pg.draw.rect(screen, '#444444',
+                                     rect.inflate(-6, -6), 0)
 
                         if Ui.paused:
-                            screen.blit(Ui.play_img, Ui.play_img.get_rect(center=rect.center))
+                            screen.blit(Ui.play_img, Ui.play_img.get_rect(
+                                center=rect.center))
                         else:
-                            screen.blit(Ui.pause_img, Ui.pause_img.get_rect(center=rect.center))
+                            screen.blit(Ui.pause_img, Ui.pause_img.get_rect(
+                                center=rect.center))
                     case 'next':
                         pg.draw.rect(screen, '#444444', rect.inflate(-6, -6), 0, border_top_right_radius=10,
                                      border_bottom_right_radius=10)
@@ -198,7 +229,8 @@ class Ui:
                         if not Ui.paused:
                             Ui.next_img.set_alpha(100)
 
-                        screen.blit(Ui.next_img, Ui.next_img.get_rect(center=rect.center))
+                        screen.blit(Ui.next_img, Ui.next_img.get_rect(
+                            center=rect.center))
 
             for i, line in enumerate(lines):
                 if line == '':
@@ -206,7 +238,8 @@ class Ui:
                                  (Ui.x + Ui.width, Ui.y + (Ui.row_height + 10) / 2 + i * Ui.row_height), 2)
                 else:
                     label = font.render(line, True, 'white')
-                    rect = label.get_rect(topleft=(Ui.x + 10, Ui.y + 5 + i * Ui.row_height))
+                    rect = label.get_rect(
+                        topleft=(Ui.x + 10, Ui.y + 5 + i * Ui.row_height))
                     screen.blit(label, rect)
 
             screen.blit(Ui._close, Ui.close_rect)
@@ -220,4 +253,5 @@ class Ui:
             screen.blit(Ui.open_icon, Ui.open_icon_rect)
 
         if Boid.goal_exists:
-            pg.draw.circle(screen, 'green' if Boid.goal_polarity > 0 else 'red', goal_pos, 10, 2)
+            pg.draw.circle(screen, 'green' if Boid.goal_polarity >
+                           0 else 'red', goal_pos, 10, 2)
